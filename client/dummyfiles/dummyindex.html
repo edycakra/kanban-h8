@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="google-signin-client_id" content="777356335430-brvkhqdho2rei5dtss0rqe8c8lmug1gl.apps.googleusercontent.com">
+    <title>KANBAN</title>
+    <!-- vue  -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!-- bulma  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
+    <!-- fontawesome  -->
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+</head>
+<body>
+    <!-- vue  -->
+    <div id="app">
+    <!-- navbar -->
+    <nav class="navbar is-black" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="#">KANBAN</a>
+        </div>
+      
+        <div id="kanbanNavbar" class="navbar-menu">
+                <div class="navbar-start">
+                    <a class="navbar-item" href="#">Documentation</a>
+                    <a class="navbar-item" href="#">About</a>
+                </div>
+            <div class="navbar-end">
+                <div class="navbar-item">
+                    <div class="buttons">
+                    <a class="button is-primary has-text-black"><strong>Register</strong></a>
+                    <a class="button is-link has-text-black"><strong>Login</strong></a>
+                    <a class="button is-danger has-text-black"><strong>Logout</strong></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>  
+    <!-- form register -->
+    <div class="container has-text-centered"  v-if="currentPage === 'register'">
+        <div class="column is-4 is-offset-4">
+            <div class="box">
+                <h3 class="title has-text-black">Register</h3><hr>
+                <form id="register-form">
+                    <div class="field">
+                        <label class="label">Username</label>
+                        <div class="control has-icons-left has-icons-right">
+                            <input class="input is-success" type="text" placeholder="type your username here" value="" required>
+                            <span class="icon is-small is-left"><i class="fas fa-user"></i></span>
+                        </div>
+                        <!-- <p class="help is-success">this username is already exists!</p> -->
+                    </div>
+                    <div class="field">
+                        <label class="label">Email</label>
+                        <div class="control has-icons-left has-icons-right">
+                          <input class="input is-danger" type="email" placeholder="type your email here" value="" required>
+                          <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
+                        </div>
+                        <!-- <p class="help is-danger">invalid email format</p> -->
+                    </div>
+                    <div class="field">
+                        <label class="label">Password</label>
+                        <div class="control has-icons-left">
+                          <input class="input is-link" type="password" placeholder="type your password here" value="" required>
+                          <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
+                        </div>
+                        <!-- <p class="help is-danger">password minimum length is 6</p> -->
+                    </div>
+                    <button class="button is-block is-primary is-fullwidth has-text-black">Register</button>
+                    <p>or</p>
+                    <button class="g-signin2" data-onsuccess="onSignIn"></button>
+                </form>
+            </div>
+            Already have an account? Login <a href="#">here</a>
+        </div>
+    </div>
+    <!-- form login -->
+    <div class="container has-text-centered" v-if="currentPage === 'login'">
+        <div class="column is-4 is-offset-4">
+            <div class="box">
+                <h3 class="title has-text-black">Login</h3><hr>
+                <form id="login-form">
+                    <div class="field">
+                        <label class="label">Email</label>
+                        <div class="control has-icons-left has-icons-right">
+                          <input class="input is-danger" type="email" placeholder="type your email here" value="" required>
+                          <span class="icon is-small is-left"><i class="fas fa-envelope"></i></span>
+                        </div>
+                        <!-- <p class="help is-danger">invalid email format</p> -->
+                    </div>
+                    <div class="field">
+                        <label class="label">Password</label>
+                        <div class="control has-icons-left">
+                          <input class="input is-link" type="password" placeholder="type your password here" value="" required>
+                          <span class="icon is-small is-left"><i class="fas fa-lock"></i></span>
+                        </div>
+                        <!-- <p class="help is-danger">invalid password</p> -->
+                    </div>
+                    <button class="button is-block is-primary is-fullwidth has-text-black">Login</button>
+                    <p>or</p>
+                    <button class="g-signin2" data-onsuccess="onSignIn"></button>
+                </form>
+            </div>
+            <p class="has-text-grey">
+                Not registered yet? Create a new account <a href="#">here</a>
+            </p>
+        </div>
+    </div>
+    <!-- form add  -->
+    <div class="container has-text-centered"  v-if="currentPage === 'addFormPage'">
+        <div class="column is-4 is-offset-4">
+            <div class="box">
+                <form id="add-form">
+                    <div class="field">
+                        <h3 class="title has-text-black">Add New Task</h3><hr>
+                        <label class="label">Title</label>
+                        <div class="control has-icons-left has-icons-right">
+                          <input class="input is-info" type="text" placeholder="type your task here" value="" required>
+                        </div>
+                    </div>
+                    <button class="button is-grey">Cancel&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-times-circle"></i></button>
+                    <button class="button is-black">Add&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-plus-circle"></i></button>
+                </form>
+            </div> 
+        </div>
+    </div>
+    <!-- form edit  -->
+    <div class="container has-text-left" v-if="currentPage === 'editFormPage'">
+        <div class="column is-4 is-offset-4">
+            <div class="box">
+                <form id="edit-form">
+                    <div class="field">
+                        <h3 class="title has-text-black">Edit Task</h3><hr>
+                        <label class="label">Title</label>
+                        <div class="control">
+                          <input class="input is-info" type="text" placeholder="type your task here" value="" required>
+                        </div>
+                        <label class="label">Category</label>
+                        <div class="control">
+                            <div class="select">
+                              <select>
+                                <option selected>Select</option>
+                                <option class="has-text-black">Backlog</option>
+                                <option class="has-text-warning">Todo</option>
+                                <option class="has-text-link">Ongoing</option>
+                                <option class="has-text-success">Done</option>
+                              </select>
+                            </div>
+                          </div>
+                    </div>
+                    <button class="button is-grey">Cancel&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-times-circle"></i></button>
+                    <button class="button is-black">Edit&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-check-circle"></i></button>
+                </form>
+            </div> 
+        </div>
+    </div>
+    <!-- dashboard -->
+    <div class="container has-text-centered" v-if="currentPage === 'dashboard'">
+        <div class="box">
+            <h1 class="title has-text-black">Kanban Dashboard</h1><hr>
+            <div class="columns is-centered cards-container">
+                <div class="column">
+                    <article class="message is-black">
+                        <div class="message-header">
+                          <p>Back Log</p>
+                        </div>
+                        <div class="message-body">
+                            <div class="board-item">
+                                <div class="board-item-content box"><span>Task 1</span><br>
+                                    <a href="#"> <i class="fas fa-edit"></i></a>
+                                    <a href="#"><i class="fas fa-trash-alt"></i></a>
+                                </div>
+                            </div>
+                            <button class="button is-black">Add&nbsp;&nbsp;&nbsp;&nbsp;<i class="fas fa-plus-circle"></i></button>
+                        </article>
+                </div>
+                <div class="column">
+                    <article class="message is-warning">
+                        <div class="message-header">
+                          <p>Todo</p>
+                        </div>
+                        <div class="message-body">
+                            <div class="board-item">
+                                <div class="board-item-content box"><span>Task 1</span><br>
+                                    <a href="#"> <i class="fas fa-edit"></i></a>
+                                    <a href="#"><i class="fas fa-trash-alt"></i></a>
+                                </div>
+                                <div class="board-item-content box"><span>Task 2</span><br>
+                                    <a href="#"> <i class="fas fa-edit"></i></a>
+                                    <a href="#"><i class="fas fa-trash-alt"></i></a>
+                                </div>
+                            </div>
+                    </article>
+                </div>
+                <div class="column">
+                    <article class="message is-info">
+                        <div class="message-header">
+                          <p>Ongoing</p>
+                        </div>
+                        <div class="message-body">
+                            <div class="board-item">
+                                <div class="board-item-content box"><span>Task 1</span><br>
+                                    <a href="#"> <i class="fas fa-edit"></i></a>
+                                    <a href="#"><i class="fas fa-trash-alt"></i></a>
+                                </div>
+                            </div>
+                    </article>
+                </div>
+                <div class="column">
+                    <div class="message is-success">
+                        <div class="message-header">
+                          <p>Done</p>
+                        </div>
+                        <div class="message-body">
+                            <div class="board-item">
+                                <div class="board-item-content box"><span>Task 1</span><br>
+                                    <a href="#"> <i class="fas fa-edit"></i></a>
+                                    <a href="#"><i class="fas fa-trash-alt"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+    <!-- chart  -->
+    <div class="container has-text-centered" v-if="currentPage === 'dashboard'">
+        <div class="column is-4 is-offset-4">
+            <div class="box">
+                <form id="googleAPI">
+                    <div class="field">
+                        <h3 class="title has-text-black">Performance Chart</h3><hr>
+                        <p>Powered by Google Chart API</p>
+                    </div>
+                </form>
+            </div> 
+        </div>
+    </div>            
+
+
+    <!-- script vue-->
+    <script>
+        var app = new Vue({
+            el: "#app",
+            data: {
+             currentPage: 'login'
+            }
+        })
+    </script>
+
+    <footer class="footer">
+        <div class="content has-text-centered">
+            <p>
+            <strong>Kanban</strong> by Edycakra Sinaga- <strong>Hacktiv8 Student</strong>
+            </p>
+        </div>
+    </footer>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="main.js"></script>
+</body>
+</html>
