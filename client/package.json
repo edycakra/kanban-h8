@@ -4,7 +4,7 @@
   "description": "This repo for your kanban client",
   "main": "main.js",
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "bulma": "^0.8.0",
     "vue": "^2.6.11",
     "vue-google-signin-button": "^1.0.4",
